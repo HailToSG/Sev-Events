@@ -27,6 +27,12 @@ public class EventController {
     public Event getOne(@PathVariable("id") Event event) {
         return event;
     }
+
+    @PostMapping
+    Event create(@RequestBody Event comment){
+        return eventRepo.save(comment);
+    }
+
     @PutMapping("{id}")
     public Event update (
             @PathVariable("id") Event eventFromDb,
