@@ -1,7 +1,9 @@
 package itc.sevevents.controllers;
 
+
 import itc.sevevents.domain.Event;
 import itc.sevevents.repos.EventRepo;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/events")
 public class EventController {
     private final EventRepo eventRepo;
 
