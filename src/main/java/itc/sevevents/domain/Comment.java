@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -34,5 +35,8 @@ public class Comment {
     public void setText(String text) {
         this.text = text;
     }
+
     private String text;
+
+    private LocalDateTime dateCreated;
 }

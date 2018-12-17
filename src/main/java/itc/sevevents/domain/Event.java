@@ -1,10 +1,13 @@
 package itc.sevevents.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
@@ -20,19 +23,28 @@ public class Event {
     private Long id;
     private Long authorId;
     private String type;
-    private Timestamp startTime;
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date dateCreated;
+
+    private LocalDateTime startTime;
     private Long duration;
-    private Long endTime;
+    private LocalDateTime endTime;
     private String shortDescription;
     private String status;
     private String relationId;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getAuthorId() {
@@ -51,11 +63,11 @@ public class Event {
         this.type = type;
     }
 
-    public Timestamp getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
@@ -67,11 +79,11 @@ public class Event {
         this.duration = duration;
     }
 
-    public Long getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Long endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

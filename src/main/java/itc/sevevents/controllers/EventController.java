@@ -2,49 +2,57 @@ package itc.sevevents.controllers;
 
 
 import itc.sevevents.domain.Event;
-import itc.sevevents.repos.EventRepo;
-
+import itc.sevevents.service.EventService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
-@RestController
-@RequestMapping("/events")
+@RestController("/")
 public class EventController {
-    private final EventRepo eventRepo;
 
     @Autowired
-    public EventController(EventRepo eventRepo) {
-        this.eventRepo = eventRepo;
+    private EventService eventService;
+
+    @GetMapping ("/events")
+    public List<Event> events(){
+        return eventService.getAllEvents();
     }
 
-    @GetMapping
-    public List<Event> list() {
-        return eventRepo.findAll();
+    @PostMapping ("/event")
+    public void publish(@RequestBody Event event){
+        if (event.getDateCreated() == null){
+            event.setDateCreated(new Date());
+        }
+        eventService.insert(event);
     }
 
-    @GetMapping("{id}")
-    public Event getOne(@PathVariable("id") Event event) {
-        return event;
-    }
-
-    @PostMapping
-    Event create(@RequestBody Event comment){
-        return eventRepo.save(comment);
-    }
-
-    @PutMapping("{id}")
+    @PutMapping("event/{id}")
     public Event update (
             @PathVariable("id") Event eventFromDb,
             @RequestBody Event event){
         BeanUtils.copyProperties(event, eventFromDb, "id");
-        return eventRepo.save(eventFromDb);
+        return eventService.save(event);
     }
+
+//    @GetMapping("{id}")
+//    public Event getOne(@PathVariable("id") Event event) {
+//        return eventService.get();
+//    }
+
+
+//    @PutMapping("{id}")
+//    public Event update (
+//            @PathVariable("id") Event eventFromDb,
+//            @RequestBody Event event){
+//        BeanUtils.copyProperties(event, eventFromDb, "id");
+//        return eventRepo.save(eventFromDb);
+//    }
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Event event){
-        eventRepo.delete(event);
+        eventService.remove(event);
     }
 }
 

@@ -7,7 +7,7 @@ function getIndex(list, id) {
     return -1;
         }
 
-let eventApi = Vue.resource('/events/{/id}');
+let eventApi = Vue.resource('/events{/id}');
 
 Vue.component('event-form', {
     props: ['events', 'eventAttr'],
@@ -52,15 +52,25 @@ Vue.component('event-form', {
 
 Vue.component('event-row', {
     props: ['event', 'editEvent', 'events'],
-    template: '<div><input type="button" value="Edit" @click="edit"/> <i>({{ event.id }})</i> {{ event.type }}</div>',
+    template: '<div>' +
+        '<input type="button" value="Edit" @click="edit"/> ' +
+        '<input type="button" value="X" @click="del"/> ' +
+        '<i>({{ event.id }})</i> {{ event.type }}</div>',
     methods: {
         edit: function () {
             this.editEvent(this.event);
+        },
+        del: function () {
+            eventApi.remove({id: this.event.id}).then(result=>{
+                if(result.ok){
+                    this.events.splice(this.events.indexOf(this.event), 1)
+                }
+            })
         }
     }
 });
 
-Vue.component('event-list', {
+Vue.component('events-list', {
     data: function () {
         return {
             event: null
@@ -70,8 +80,9 @@ Vue.component('event-list', {
 
     template: '<div>' +
         '<event-form :events ="events" :eventAttr="event"/>' +
-        '<event-row v-for="event in events" :key="event.id" :event="event" :editEvent="editEvent"/></div>',
-    created: function () {
+        '<event-row v-for="event in events" :key="event.id" :event="event" ' +
+        ':events="events" :editEvent="editEvent"/></div>',
+    create: function () {
         eventApi.get().then(result => result.join().then(data =>
             data.forEach(event =>
                 this.events.push(event())))
@@ -84,13 +95,13 @@ Vue.component('event-list', {
         }
 
     }
-});
 
-var app = new Vue({
+});
+let app = new Vue({
         el: '#app',
-        template: '<event-list :events="events" />',
+        template: '<events-list :events="events" />',
         data: {
-            events: []
+            events: ['']
         }
     }
 );
