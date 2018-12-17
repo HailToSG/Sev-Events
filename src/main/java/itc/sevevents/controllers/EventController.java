@@ -37,19 +37,11 @@ public class EventController {
         return eventService.save(event);
     }
 
-//    @GetMapping("{id}")
-//    public Event getOne(@PathVariable("id") Event event) {
-//        return eventService.get();
-//    }
+    @GetMapping("event/{id}")
+    public Event getOne(@PathVariable("id") Event event) {
+        return eventService.get(event);
+    }
 
-
-//    @PutMapping("{id}")
-//    public Event update (
-//            @PathVariable("id") Event eventFromDb,
-//            @RequestBody Event event){
-//        BeanUtils.copyProperties(event, eventFromDb, "id");
-//        return eventRepo.save(eventFromDb);
-//    }
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Event event){
         eventService.remove(event);
