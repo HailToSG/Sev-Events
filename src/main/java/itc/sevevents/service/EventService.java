@@ -9,26 +9,26 @@ import java.util.List;
 
 @Service
 public class EventService {
+    private final EventRepo eventRepo;
 
     @Autowired
-    private EventRepo eventRepo;
+    public EventService(EventRepo eventRepo) {
+        this.eventRepo = eventRepo;
+    }
 
     public List<Event> getAllEvents() {
         return eventRepo.findAll();
     }
-    public void insert (Event event){
-        eventRepo.save(event);
-    }
 
-    public void remove (Event event){
+    public void removeEvent(Event event){
         eventRepo.delete(event);
     }
 
-    public Event save(Event event) {
+    public Event saveEvent(Event event) {
        return eventRepo.save(event);
     }
 
-    public Event get(Event event) {
+    public Event getEvent(Event event) {
        return eventRepo.getOne(event.getId());
     }
 }

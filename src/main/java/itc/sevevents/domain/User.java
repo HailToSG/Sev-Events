@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,24 +17,67 @@ import java.util.Set;
 public class User {
     public User() {
     }
-
-    public User (String username, String password, List<Role> roleList) {
-        this.username = username;
-        this.password = password;
-        if(roleList!=null&& !roleList.isEmpty()) {
-            roles.addAll(roleList);
-        }
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String username;
+    private String id;
+    private String name;
+    private String userpic;
+    private String email;
+    private String gender;
+    private String locale;
+    private LocalDateTime lastVisit;
     private String password;
     private boolean isActive;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Role> roles = new HashSet<>();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUserpic() {
+        return userpic;
+    }
+
+    public void setUserpic(String userpic) {
+        this.userpic = userpic;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public LocalDateTime getLastVisit() {
+        return lastVisit;
+    }
+
+    public void setLastVisit(LocalDateTime lastVisit) {
+        this.lastVisit = lastVisit;
+    }
 
     public boolean isActive() {
         return isActive;
@@ -52,20 +95,20 @@ public class User {
         this.roles = roles;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public String getUsername() {
-        return username;
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

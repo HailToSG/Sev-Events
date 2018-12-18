@@ -1,58 +1,62 @@
 package itc.sevevents.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
-@Table(name="event")
-@ToString(of = {"id", "authorId", "type", "startTime", "endTime", "duration", "shortDescription",
-        "status", "relationId"  })
+@Table(name = "event")
+@ToString(of = {"id", "author", "dateCreated", "type", "startTime", "endTime", "duration", "shortDescription", "status"})
 @EqualsAndHashCode(of = {"id"})
 public class Event {
-    public Event(){
+    public Event() {
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Id.class)
     private Long id;
-    private Long authorId;
+    @ManyToOne
     private String type;
 
-    public Date getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date dateCreated;
-
+    private LocalDateTime dateCreated;
     private LocalDateTime startTime;
     private Long duration;
     private LocalDateTime endTime;
     private String shortDescription;
     private String status;
-    private String relationId;
+
+    public List<Event> getRelatedEvents() {
+        return relatedEvents;
+    }
+
+    public void setRelatedEvents(List<Event> relatedEvents) {
+        this.relatedEvents = relatedEvents;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Event> relatedEvents = new ArrayList<>();
 
     public Long getId() {
         return id;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
     }
 
     public String getType() {
@@ -103,12 +107,7 @@ public class Event {
         this.status = status;
     }
 
-    public String getRelationId() {
-        return relationId;
-    }
-
-    public void setRelationId(String relationId) {
-        this.relationId = relationId;
+    public void setId(Long id) {
+        this.id = id;
     }
 }
-

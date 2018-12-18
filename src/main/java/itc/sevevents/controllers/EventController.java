@@ -3,18 +3,24 @@ package itc.sevevents.controllers;
 
 import itc.sevevents.domain.Event;
 import itc.sevevents.service.EventService;
+import itc.sevevents.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 import java.util.List;
+
+import static java.time.LocalDateTime.now;
 
 @RestController("/")
 public class EventController {
+    private EventService eventService;
+    private UserService userService;
 
     @Autowired
-    private EventService eventService;
+    public EventController (EventService eventService, UserService userService){
+        this.eventService = eventService;
+        this.userService = userService;
+    }
 
     @GetMapping ("/events")
     public List<Event> events(){
@@ -24,9 +30,9 @@ public class EventController {
     @PostMapping ("/event")
     public void publish(@RequestBody Event event){
         if (event.getDateCreated() == null){
-            event.setDateCreated(new Date());
+            event.setDateCreated(now());
         }
-        eventService.insert(event);
+        eventService.saveEvent(event);
     }
 
     @PutMapping("event/{id}")
@@ -34,17 +40,17 @@ public class EventController {
             @PathVariable("id") Event eventFromDb,
             @RequestBody Event event){
         BeanUtils.copyProperties(event, eventFromDb, "id");
-        return eventService.save(event);
+        return eventService.saveEvent(event);
     }
 
     @GetMapping("event/{id}")
     public Event getOne(@PathVariable("id") Event event) {
-        return eventService.get(event);
+        return eventService.getEvent(event);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("event/{id}")
     public void delete(@PathVariable("id") Event event){
-        eventService.remove(event);
+        eventService.removeEvent(event);
     }
 }
 
