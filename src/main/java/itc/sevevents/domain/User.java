@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,7 +15,17 @@ import java.util.Set;
 @ToString(of = {"id"})
 @EqualsAndHashCode(of = {"id"})
 public class User {
-    public User (){}
+    public User() {
+    }
+
+    public User (String username, String password, List<Role> roleList) {
+        this.username = username;
+        this.password = password;
+        if(roleList!=null&& !roleList.isEmpty()) {
+            roles.addAll(roleList);
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,7 +34,7 @@ public class User {
     private boolean isActive;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public boolean isActive() {
         return isActive;

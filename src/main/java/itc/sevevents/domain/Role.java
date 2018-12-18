@@ -9,6 +9,9 @@ import javax.persistence.Id;
 public class Role {
     Role() {
     }
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,7 +30,5 @@ public class Role {
         return id;
     }
 
-    public Role(String roleName) {
-        this.roleName = roleName;
-    }
+
 }

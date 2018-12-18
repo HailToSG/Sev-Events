@@ -7,7 +7,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name="comment")
 @ToString(of = {"id", "text"})
