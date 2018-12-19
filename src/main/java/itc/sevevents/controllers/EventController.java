@@ -11,7 +11,7 @@ import java.util.List;
 
 import static java.time.LocalDateTime.now;
 
-@RestController("/")
+@RestController("/events")
 public class EventController {
     private EventService eventService;
     private UserService userService;
@@ -22,12 +22,12 @@ public class EventController {
         this.userService = userService;
     }
 
-    @GetMapping ("/events")
+    @GetMapping
     public List<Event> events(){
         return eventService.getAllEvents();
     }
 
-    @PostMapping ("/event")
+    @PostMapping ("/post")
     public void publish(@RequestBody Event event){
         if (event.getDateCreated() == null){
             event.setDateCreated(now());
@@ -35,7 +35,7 @@ public class EventController {
         eventService.saveEvent(event);
     }
 
-    @PutMapping("event/{id}")
+    @PutMapping("/{id}")
     public Event update (
             @PathVariable("id") Event eventFromDb,
             @RequestBody Event event){
@@ -43,12 +43,12 @@ public class EventController {
         return eventService.saveEvent(event);
     }
 
-    @GetMapping("event/{id}")
+    @GetMapping("/{id}")
     public Event getOne(@PathVariable("id") Event event) {
         return eventService.getEvent(event);
     }
 
-    @DeleteMapping("event/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Event event){
         eventService.removeEvent(event);
     }

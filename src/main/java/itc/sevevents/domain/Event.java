@@ -24,7 +24,6 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
-    @ManyToOne
     private String type;
 
     public LocalDateTime getDateCreated() {
@@ -52,7 +51,7 @@ public class Event {
         this.relatedEvents = relatedEvents;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Event.class)
     private List<Event> relatedEvents = new ArrayList<>();
 
     public Long getId() {
