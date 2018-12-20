@@ -28,7 +28,7 @@ public class User {
     private String password;
     private boolean isActive;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Role.class)
     private Set<Role> roles = new HashSet<>();
 
     public String getName() {
@@ -118,5 +118,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

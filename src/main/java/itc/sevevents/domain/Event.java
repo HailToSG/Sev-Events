@@ -1,15 +1,12 @@
 package itc.sevevents.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -22,7 +19,6 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Views.Id.class)
     private Long id;
     private String type;
 
@@ -42,17 +38,6 @@ public class Event {
     private LocalDateTime endTime;
     private String shortDescription;
     private String status;
-
-    public List<Event> getRelatedEvents() {
-        return relatedEvents;
-    }
-
-    public void setRelatedEvents(List<Event> relatedEvents) {
-        this.relatedEvents = relatedEvents;
-    }
-
-    @ManyToMany(targetEntity = Event.class)
-    private List<Event> relatedEvents = new ArrayList<>();
 
     public Long getId() {
         return id;

@@ -1,6 +1,5 @@
 package itc.sevevents.domain;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 public class Comment {
     public Comment(){
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
