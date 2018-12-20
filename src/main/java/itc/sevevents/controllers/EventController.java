@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
-
 @RestController
 public class EventController {
     private EventService eventService;
@@ -29,13 +27,10 @@ public class EventController {
 
     @PostMapping ("/events/post")
     public void publish(@RequestBody Event event){
-        if (event.getDateCreated() == null){
-            event.setDateCreated(now());
-        }
         eventService.saveEvent(event);
     }
 
-    @PutMapping("/events/{id}")
+    @PutMapping("/events/post/{id}")
     public Event update (
             @PathVariable("id") Event eventFromDb,
             @RequestBody Event event){

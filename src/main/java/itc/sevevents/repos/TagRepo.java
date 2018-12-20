@@ -1,10 +1,9 @@
 package itc.sevevents.repos;
 
-import itc.sevevents.domain.Event;
+import itc.sevevents.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EventRepo extends JpaRepository <Event, Long> {
+public interface TagRepo extends JpaRepository<Tag, Long> {
 }
-

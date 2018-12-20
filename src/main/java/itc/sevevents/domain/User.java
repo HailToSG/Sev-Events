@@ -1,5 +1,6 @@
 package itc.sevevents.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -10,6 +11,9 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "usr")
@@ -29,6 +33,10 @@ public class User {
     @Column(name = "usr_id", updatable = false, nullable = false)
     private String id;
 
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateCreated = now();
+
     private String name;
     private String userpic;
     private String email;
@@ -38,7 +46,7 @@ public class User {
     private String password;
     private boolean isActive;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "usr_role",
             joinColumns = {@JoinColumn(name = "usr_id")},
@@ -46,7 +54,7 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = EAGER)
     private Set<Comment> comments = new HashSet<>();
 
     public Set<Comment> getComments() {
@@ -65,7 +73,7 @@ public class User {
         this.likes = likes;
     }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = EAGER)
     private Set<Favor> likes = new HashSet<>();
 
     public String getName() {

@@ -1,8 +1,14 @@
 package itc.sevevents.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table
@@ -21,6 +27,10 @@ public class Role {
     @Column(name = "role_id", updatable = false, nullable = false)
     private Long id;
     private String roleName;
+
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateCreated= now();
 
     public void setId(Long id) {
         this.id = id;
@@ -44,7 +54,7 @@ public class Role {
 
     private String roleDescription;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(fetch = EAGER, mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
     public String getRoleName() {

@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "favor")
@@ -14,8 +15,7 @@ import static java.time.LocalDateTime.*;
 @EqualsAndHashCode(of = {"id"})
 public class Favor {
     Favor(User user){
-        this.user = user;
-        this.dateCreated = now();
+        this.user = user;;
     }
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "favor_generator")
@@ -29,7 +29,7 @@ public class Favor {
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    final private LocalDateTime dateCreated;
+    private LocalDateTime dateCreated= now();
 
     public Long getId() {
         return id;
@@ -47,7 +47,7 @@ public class Favor {
         return user;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "usr_id")
     final private User user;
 }

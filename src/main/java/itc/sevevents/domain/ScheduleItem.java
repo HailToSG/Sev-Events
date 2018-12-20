@@ -7,12 +7,14 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name = "schedule_item")
 @ToString(of = {"id", ""})
 @EqualsAndHashCode(of = {"id"})
 public class ScheduleItem {
-
     ScheduleItem(Event event) {
         this.event = event;
     }
@@ -27,7 +29,11 @@ public class ScheduleItem {
     @Column(name = "schedule_id", updatable = false, nullable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateCreated = now();
+
+    @ManyToOne(fetch = EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     private Event event;
 

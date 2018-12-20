@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "comment")
@@ -15,7 +16,6 @@ import static java.time.LocalDateTime.*;
 public class Comment {
     public Comment(User user) {
         this.user = user;
-        this.dateCreated = now();
     }
 
     @Id
@@ -27,6 +27,14 @@ public class Comment {
             allocationSize = 1)
     @Column(name = "comment_id", updatable = false, nullable = false)
     private Long id;
+
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateCreated= now();
+
+    @ManyToOne(fetch = EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "usr_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -53,12 +61,4 @@ public class Comment {
     }
 
     private String text;
-
-    @Column(updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    final private LocalDateTime dateCreated;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usr_id")
-    private final User user;
 }

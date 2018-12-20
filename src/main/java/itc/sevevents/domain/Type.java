@@ -1,12 +1,19 @@
 package itc.sevevents.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "event_type")
 public class Type {
+    Type(){}
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "type_generator")
     @SequenceGenerator(
@@ -17,10 +24,14 @@ public class Type {
     @Column(name = "type_id", updatable = false, nullable = false)
     Long id;
 
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateCreated = now();
+
     private String fullDescription;
     private String shortDescription;
 
-    @ManyToMany(mappedBy = "types")
+    @ManyToMany(fetch = EAGER, mappedBy = "types")
     private Set<Event> events = new HashSet<>();
 
     public Long getId() {

@@ -1,16 +1,20 @@
 package itc.sevevents.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.now;
+import static javax.persistence.FetchType.EAGER;
 
 
 @Entity
@@ -18,10 +22,7 @@ import static java.time.LocalDateTime.*;
 @ToString(of = {"id", "author", "dateCreated", "type", "startTime", "endTime", "duration", "shortDescription", "status"})
 @EqualsAndHashCode(of = {"id"})
 public class Event {
-    public Event() {
-        this.schedule.add(new ScheduleItem(this));
-        this.dateCreated = now();
-    }
+    public Event() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_generator")
@@ -43,16 +44,21 @@ public class Event {
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateCreated;
+    private LocalDateTime dateCreated = now();
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
+
+    @JsonDeserialize(using= LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
     private String shortDescription;
     private String status;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "event_event_type",
             joinColumns = {@JoinColumn(name = "event_id")},
@@ -60,7 +66,7 @@ public class Event {
     )
     private Set<Type> types = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "event_tag",
             joinColumns = {@JoinColumn(name = "event_id")},
@@ -100,7 +106,7 @@ public class Event {
         this.endTime = endTime;
     }
 
-    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "event", fetch = EAGER)
     private Set<ScheduleItem> schedule = new HashSet<>();
 
     public Long getId() {
