@@ -26,7 +26,7 @@ public class EventController {
     }
 
     @PostMapping ("/events/post")
-    public void publish(@RequestBody Event event){
+    public void create(@RequestBody Event event){
         eventService.saveEvent(event);
     }
 
@@ -36,6 +36,11 @@ public class EventController {
             @RequestBody Event event){
         BeanUtils.copyProperties(event, eventFromDb, "id");
         return eventService.saveEvent(eventFromDb);
+    }
+
+    @GetMapping("/events/{%%}")
+    public Event find (){
+        return new Event();
     }
 
     @GetMapping("/events/{id}")
