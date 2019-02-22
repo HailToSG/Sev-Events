@@ -1,1 +1,1 @@
-City events aggregator
+API for city events aggregator 
